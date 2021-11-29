@@ -1,11 +1,9 @@
-from model.classes import User
+from model.user import User
 
 if __name__ == '__main__':
-    user_one = User(1, 'jsonua')
-    print(user_one.get_assets())
-    user_one.top_up_assets(100)
-    print(user_one.get_assets())
+    user_one = User('tthor1eu3sa69jvudksdt5qv43s8qwdrqq2ukkkjlvc4', 'jsonua')
 
-    user_two = User(2, 'random')
-    user_two.increase_wins()
-    print(user_two.get_num_of_wins())
+    user_one.calculate_amount_of_tickets()
+    user_one.generate_tickets()
+    for ticket in user_one.get_tickets():
+        print(ticket)
