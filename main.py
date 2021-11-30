@@ -1,9 +1,23 @@
+import requests
+
+from model.lottery import Lottery
 from model.user import User
 
 if __name__ == '__main__':
-    user_one = User('tthor1eu3sa69jvudksdt5qv43s8qwdrqq2ukkkjlvc4', 'jsonua')
+    users = []
+    members = requests.get('https://testnet.midgard.thorchain.info/v2/members').json()
+    for member in members:
+        user = User(member, member)
+        user.calculate_amount_of_tickets()
+        user.generate_tickets()
+        users.append(user)
 
-    user_one.calculate_amount_of_tickets()
-    user_one.generate_tickets()
-    for ticket in user_one.get_tickets():
-        print(ticket)
+    for i in range(1, 11):
+        print('Lottery: ' + str(i))
+        lottery = Lottery(users)
+        winner_player = lottery.start_lottery()
+        print(f'The winner is: {winner_player.nickname}')
+        print(f'Amount of tickets: {winner_player.get_amount_of_tickets()}')
+        print(f'Number of wins: {winner_player.get_num_of_wins()}')
+        print('--------------------------------')
+        print()
