@@ -1,6 +1,7 @@
 from thorchain import api
 from model.ticket import Ticket
 from model.pool import PoolItem
+import json
 
 
 class User:
@@ -37,6 +38,8 @@ class User:
         if member_details is not None:
             for pool in member_details['pools']:
                 pool_name, liquidity_units = pool['pool'], pool['liquidityUnits']
+                if int(liquidity_units) < 10:
+                    continue
                 pool_item = PoolItem(pool_name, liquidity_units)
                 try:
                     pool_share = self.calculate_pool_share(pool_item)
@@ -60,3 +63,10 @@ class User:
     def erase_tickets(self):
         self.__tickets = []
         self.__tickets_amount = 0
+
+
+class UserEncoder(json.JSONEncoder):
+    def default(self, obj):
+        if isinstance(obj, User):
+            return obj.__dict__
+        return json.JSONEncoder.default(self, obj)
