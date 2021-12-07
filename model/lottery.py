@@ -2,15 +2,14 @@ import random
 
 
 class Lottery:
-    players = []
 
-    def __init__(self, players):
-        self.players = players
-
-    def start_lottery(self):
+    @classmethod
+    def start_lottery(cls, players):
         all_tickets = []
         map = {}
-        for player in self.players:
+        for player in players:
+            player.calculate_amount_of_tickets()
+            player.generate_tickets()
             for ticket in player.get_tickets():
                 map[ticket] = player
             all_tickets.extend(player.get_tickets())
